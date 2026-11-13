@@ -280,7 +280,7 @@ body.sheet-open{overflow:hidden}
   </button>
   <div class="titles">
     <h1 id="title">Receitas</h1>
-    <p id="sub">7 receitas</p>
+    <p id="sub">8 receitas</p>
   </div>
   <button class="icon-btn" id="theme" aria-label="Alternar tema claro e escuro">
     <svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
@@ -294,7 +294,7 @@ body.sheet-open{overflow:hidden}
         <div>
           <strong>Receitas</strong>
           <span>Receitas reunidas em vídeos e testadas na cozinha, com os ingredientes em gramas ou nas medidas de copo e colher.</span>
-          <span class="pill">7 receitas</span>
+          <span class="pill">8 receitas</span>
         </div>
       </div>
 
@@ -303,7 +303,7 @@ body.sheet-open{overflow:hidden}
         <input id="q" type="search" placeholder="Buscar receita ou ingrediente" autocomplete="off" enterkeyhint="search">
       </label>
 
-      <div class="chips" id="chips" role="group" aria-label="Categorias"><button class="chip" data-cat="Todos" aria-pressed="true">Todas</button><button class="chip" data-cat="Favoritas" aria-pressed="false">★ Favoritas</button><button class="chip" data-cat="Aves" aria-pressed="false">Aves <span class="cnt">2</span></button><button class="chip" data-cat="Acompanhamentos" aria-pressed="false">Acompanhamentos <span class="cnt">2</span></button><button class="chip" data-cat="Doces" aria-pressed="false">Doces <span class="cnt">1</span></button><button class="chip" data-cat="Carnes" aria-pressed="false">Carnes <span class="cnt">1</span></button><button class="chip" data-cat="Massas" aria-pressed="false">Massas <span class="cnt">1</span></button></div>
+      <div class="chips" id="chips" role="group" aria-label="Categorias"><button class="chip" data-cat="Todos" aria-pressed="true">Todas</button><button class="chip" data-cat="Favoritas" aria-pressed="false">★ Favoritas</button><button class="chip" data-cat="Aves" aria-pressed="false">Aves <span class="cnt">2</span></button><button class="chip" data-cat="Acompanhamentos" aria-pressed="false">Acompanhamentos <span class="cnt">2</span></button><button class="chip" data-cat="Doces" aria-pressed="false">Doces <span class="cnt">1</span></button><button class="chip" data-cat="Carnes" aria-pressed="false">Carnes <span class="cnt">1</span></button><button class="chip" data-cat="Massas" aria-pressed="false">Massas <span class="cnt">1</span></button><button class="chip" data-cat="Frutos do mar" aria-pressed="false">Frutos do mar <span class="cnt">1</span></button></div>
 
       <div class="list" id="list">
       <div class="item" role="button" tabindex="0" data-id="0" data-cat="Aves" data-search="frango agridoce e picante aves como faz — leo abreu frango (meio da asa, asa ou coxa) shoyu ketchup mel oleo de gergelim paprica defumada pimenta caiena alho em po gengibre em po coentro em po sal pimenta-do-reino raspas de limao suco de limao gergelim cebolinha" data-fav="0">
@@ -354,6 +354,13 @@ body.sheet-open{overflow:hidden}
           <span class="m">Aves · Adenilza Araújo</span>
         </span>
         <button class="star" data-id="6" aria-label="Favoritar Coxinha da asa com molho agridoce" aria-pressed="false">☆</button>
+      </div>
+      <div class="item" role="button" tabindex="0" data-id="7" data-cat="Frutos do mar" data-search="camarao internacional do coco bambu frutos do mar ana maria brogui arroz agua sal cebola alho azeite creme de leite leite amido de milho cebola manteiga queijo parmesao ralado noz-moscada sal e pimenta-do-reino presunto magro picado queijo mussarela picado ervilha camarao sem casca manteiga suco de limao batata palha sal" data-fav="0">
+        <span class="txt">
+          <span class="n">Camarão internacional do Coco Bambu</span>
+          <span class="m">Frutos do mar · Ana Maria Brogui</span>
+        </span>
+        <button class="star" data-id="7" aria-label="Favoritar Camarão internacional do Coco Bambu" aria-pressed="false">☆</button>
       </div></div>
       <p class="empty" id="empty" hidden>Nenhuma receita encontrada.</p>
     </div>
@@ -664,6 +671,47 @@ body.sheet-open{overflow:hidden}
         <div class="tips-card">
           <h3 class="block-title">Dicas</h3>
           <ul class="tips"><li>O vídeo não tem legendas: o preparo foi montado com a descrição (30 minutos de molho e 10 minutos de cozimento) e com os ingredientes listados — confira o vídeo se quiser o detalhe exato de cada etapa.</li><li>O mel e a mostarda são o que dão o ponto agridoce; prove o molho antes de envolver as coxinhas.</li><li>Se o molho reduzir demais, acrescente uma colher de água e volte ao fogo.</li><li>Sirva com arroz branco e salada, ou como petisco.</li></ul>
+        </div>
+      </div>
+    </section>
+    <section class="screen recipe" id="r-7" data-name="Camarão internacional do Coco Bambu" data-unit="g" hidden>
+      <div class="wrap">
+        <div class="r-head">
+          <div class="grow">
+            <h2>Camarão internacional do Coco Bambu</h2>
+            <div class="meta">Frutos do mar · <a class="src" href="https://www.youtube.com/watch?v=M-n9nRBR3To" target="_blank" rel="noopener">Vídeo: Ana Maria Brogui</a></div>
+          </div>
+          <button class="icon-btn star" data-id="7" aria-label="Favoritar Camarão internacional do Coco Bambu" aria-pressed="false">☆</button>
+          <button class="icon-btn share" data-id="7" aria-label="Compartilhar Camarão internacional do Coco Bambu"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
+        </div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Formato das quantidades">
+            <button data-unit="g" aria-pressed="true">Gramas</button>
+            <button data-unit="m" aria-pressed="false">Medidas</button>
+          </div>
+        </div>
+        <div class="tbl-wrap unit-g">
+          <table class="tbl" data-mode="all" data-id="7">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade (g)</th></tr></thead>
+            <tbody><tr class="sec"><td colspan="2">ARROZ</td></tr><tr><td data-size="ing">Arroz</td><td class="num" data-size="0">400</td></tr><tr><td data-size="ing">Água</td><td class="num" data-size="0">960</td></tr><tr><td data-size="ing">Sal</td><td class="num" data-size="0">2</td></tr><tr><td data-size="ing">Cebola</td><td class="num" data-size="0">50</td></tr><tr><td data-size="ing">Alho</td><td class="num" data-size="0">3</td></tr><tr><td data-size="ing">Azeite</td><td class="num" data-size="0">14</td></tr><tr class="sec"><td colspan="2">MOLHO BRANCO</td></tr><tr><td data-size="ing">Creme de leite</td><td class="num" data-size="0">200</td></tr><tr><td data-size="ing">Leite</td><td class="num" data-size="0">515</td></tr><tr><td data-size="ing">Amido de milho</td><td class="num" data-size="0">16</td></tr><tr><td data-size="ing">Cebola</td><td class="num" data-size="0">50</td></tr><tr><td data-size="ing">Manteiga</td><td class="num" data-size="0">14</td></tr><tr><td data-size="ing">Queijo parmesão ralado</td><td class="num" data-size="0">60</td></tr><tr><td data-size="ing">Noz-moscada</td><td class="num" data-size="0">1</td></tr><tr><td data-size="ing">Sal e pimenta-do-reino</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="sec"><td colspan="2">FINALIZAÇÃO</td></tr><tr><td data-size="ing">Presunto magro picado</td><td class="num" data-size="0">200</td></tr><tr><td data-size="ing">Queijo mussarela picado</td><td class="num" data-size="0">300</td></tr><tr><td data-size="ing">Ervilha</td><td class="num" data-size="0">100</td></tr><tr><td data-size="ing">Camarão sem casca</td><td class="num" data-size="0">400</td></tr><tr><td data-size="ing">Manteiga</td><td class="num" data-size="0">28</td></tr><tr><td data-size="ing">Suco de limão</td><td class="num" data-size="0">50</td></tr><tr><td data-size="ing">Batata palha</td><td class="num" data-size="0">100</td></tr><tr><td data-size="ing">Sal</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="total"><td data-size="ing">Soma dos ingredientes</td><td class="num" data-size="0">3463</td></tr></tbody>
+          </table>
+        </div>
+        <div class="tbl-wrap unit-m">
+          <table class="tbl measure" data-mode="all" data-id="7">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade</th></tr></thead>
+            <tbody><tr class="sec"><td colspan="2">ARROZ</td></tr><tr><td data-size="ing">Arroz</td><td class="q" data-size="0">2 xícaras</td></tr><tr><td data-size="ing">Água</td><td class="q" data-size="0">4 xícaras</td></tr><tr><td data-size="ing">Sal</td><td class="q" data-size="0">1 colher (café)</td></tr><tr><td data-size="ing">Cebola</td><td class="q" data-size="0">1/2</td></tr><tr><td data-size="ing">Alho</td><td class="q" data-size="0">1 dente</td></tr><tr><td data-size="ing">Azeite</td><td class="q dim" data-size="0">a gosto</td></tr><tr class="sec"><td colspan="2">MOLHO BRANCO</td></tr><tr><td data-size="ing">Creme de leite</td><td class="q" data-size="0">1 caixinha</td></tr><tr><td data-size="ing">Leite</td><td class="q" data-size="0">500 ml</td></tr><tr><td data-size="ing">Amido de milho</td><td class="q" data-size="0">2 colheres (sopa)</td></tr><tr><td data-size="ing">Cebola</td><td class="q" data-size="0">1/2</td></tr><tr><td data-size="ing">Manteiga</td><td class="q" data-size="0">1 colher (sopa)</td></tr><tr><td data-size="ing">Queijo parmesão ralado</td><td class="q" data-size="0">1/2 xícara</td></tr><tr><td data-size="ing">Noz-moscada</td><td class="q" data-size="0">1 pitada</td></tr><tr><td data-size="ing">Sal e pimenta-do-reino</td><td class="q dim" data-size="0">a gosto</td></tr><tr class="sec"><td colspan="2">FINALIZAÇÃO</td></tr><tr><td data-size="ing">Presunto magro picado</td><td class="q" data-size="0">200 g</td></tr><tr><td data-size="ing">Queijo mussarela picado</td><td class="q" data-size="0">300 g</td></tr><tr><td data-size="ing">Ervilha</td><td class="q" data-size="0">1/2 lata</td></tr><tr><td data-size="ing">Camarão sem casca</td><td class="q" data-size="0">400 g</td></tr><tr><td data-size="ing">Manteiga</td><td class="q" data-size="0">2 colheres (sopa)</td></tr><tr><td data-size="ing">Suco de limão</td><td class="q" data-size="0">1 limão</td></tr><tr><td data-size="ing">Batata palha</td><td class="q" data-size="0">1 pacote</td></tr><tr><td data-size="ing">Sal</td><td class="q dim" data-size="0">a gosto</td></tr></tbody>
+          </table>
+        </div>
+        <p class="note note-g">Quantidades em gramas. “a gosto” = sem quantidade fixa na receita original.</p>
+        <p class="note note-m">Medidas como na receita original (copos, colheres, gramas e mililitros). “a gosto” = sem quantidade fixa.</p>
+        
+        <div class="steps-card">
+          <h3 class="block-title">Modo de preparo</h3>
+          <ol class="steps"><li>Arroz: refogar a cebola e o alho no azeite, juntar o arroz e o sal e mexer por um minuto.</li><li>Juntar a água, tampar e cozinhar em fogo baixo até secar, cerca de 15 a 20 minutos.</li><li>Camarão: temperar com sal e o suco de limão e deixar descansar por alguns minutos.</li><li>Dourar o camarão na manteiga em fogo alto, rapidamente, até ficar rosado; reservar.</li><li>Molho branco: refogar a cebola na manteiga; dissolver o amido no leite frio e juntar, mexendo até engrossar.</li><li>Juntar o creme de leite, o parmesão, a noz-moscada, o sal e a pimenta e cozinhar por mais dois minutos.</li><li>Numa travessa, montar camadas de arroz, presunto, ervilha e o camarão reservado.</li><li>Cobrir com o molho branco e a mussarela picada; distribuir as 4 fatias inteiras de mussarela por cima.</li><li>Levar ao forno alto para gratinar até o queijo derreter e dourar.</li><li>Finalizar com a batata palha só na hora de servir.</li></ol>
+        </div>
+        <div class="tips-card">
+          <h3 class="block-title">Dicas</h3>
+          <ul class="tips"><li>Reserve 4 fatias inteiras de mussarela para o gratinado, como pede a receita.</li><li>A batata palha entra depois do forno: no calor ela murcha e perde a crocância.</li><li>Dissolva o amido no leite frio antes de levar ao fogo, para não empelotar.</li><li>O camarão 30/50 é o tamanho usado no vídeo; doure rápido, senão fica borrachudo.</li><li>As legendas do vídeo não estavam disponíveis na hora da extração: o passo a passo segue a descrição oficial, que traz as três etapas separadas (arroz, molho branco e finalização).</li></ul>
         </div>
       </div>
     </section>
