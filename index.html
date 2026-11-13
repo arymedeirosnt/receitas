@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#faf7f2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Receitas">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="Receitas com os ingredientes em gramas ou nas medidas de copo e colher.">
+<title>Receitas</title>
+<style>
+:root{
+  --bg:#faf7f2; --card:#ffffff; --text:#211a15; --muted:#7a6c60; --line:#eae0d4;
+  --accent:#1f3a5f; --accent2:#b9563b; --chip:#ffffff;
+  --section:#f3ece3; --total:#f8f2e9; --shadow:0 1px 2px rgba(33,26,21,.05), 0 8px 24px rgba(33,26,21,.06);
+  --hero1:#1f3a5f; --hero2:#2e5580;
+}
+[data-theme="dark"]{
+  --bg:#12100f; --card:#1d1917; --text:#f4ede4; --muted:#a99b8d; --line:#2c2521;
+  --accent:#9dbce6; --accent2:#e79f6a; --chip:#1d1917;
+  --section:#241f1b; --total:#292320; --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 26px rgba(0,0,0,.28);
+  --hero1:#22303f; --hero2:#31465c;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; background:var(--bg)}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.45; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  min-height:100dvh; overflow-x:hidden;
+}
+button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer}
+button, a{-webkit-tap-highlight-color:transparent}
+h1,h2,h3{margin:0; font-weight:650; letter-spacing:-.015em}
+img{max-width:100%; display:block}
+[hidden]{display:none !important}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:10px;
+  padding:calc(9px + env(safe-area-inset-top)) 14px 9px;
+  background:var(--bg); border-bottom:1px solid transparent; transition:border-color .2s, box-shadow .2s;
+}
+.topbar.scrolled{border-bottom-color:var(--line); box-shadow:0 6px 16px rgba(0,0,0,.05)}
+.topbar.compact .titles p{display:none}
+.titles{flex:1; min-width:0}
+.titles h1{font-size:16.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:opacity .12s}
+.titles p{margin:1px 0 0; font-size:11.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.icon-btn{
+  flex:0 0 auto; width:40px; height:40px; border-radius:13px; display:grid; place-items:center;
+  background:var(--card); border:1px solid var(--line); color:var(--text); transition:transform .12s ease, background .2s;
+}
+.icon-btn:active{transform:scale(.93)}
+.icon-btn svg{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
+.icon-btn.star{font-size:19px; line-height:1; color:var(--muted)}
+.icon-btn.star.on{color:var(--accent2); background:color-mix(in srgb, var(--accent2) 12%, var(--card))}
+
+/* ---------- layout ---------- */
+main{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+.wrap{max-width:940px; margin:0 auto; padding:0 14px}
+@media (min-width:760px){ .wrap{padding:0 24px} }
+
+.page-title{font-size:23px; margin:16px 0 6px}
+.lead{color:var(--muted); font-size:13.5px; margin:18px 0 14px}
+
+/* ---------- hero ---------- */
+.hero{
+  display:flex; gap:14px; align-items:center; margin:14px 0 12px; padding:14px;
+  border-radius:22px; color:#fff; background:linear-gradient(145deg, var(--hero1), var(--hero2));
+  box-shadow:0 10px 26px rgba(31,58,95,.20);
+}
+.hero img{width:88px; height:88px; object-fit:contain; background:#fff; border-radius:16px; padding:5px; flex:0 0 auto}
+.hero strong{display:block; font-size:15px; font-weight:650}
+.hero span{display:block; font-size:12.5px; opacity:.86; margin-top:4px}
+.hero-plain{padding:18px}
+.hero .pill{display:inline-block; margin-top:8px; font-size:11px; padding:4px 9px; border-radius:999px; background:rgba(255,255,255,.16)}
+
+/* ---------- search ---------- */
+.search{position:relative; display:block; margin:6px 0 8px}
+.search svg{position:absolute; left:13px; top:50%; transform:translateY(-50%); width:18px; height:18px; stroke:var(--muted); fill:none; stroke-width:2; stroke-linecap:round}
+.search input{
+  width:100%; padding:13px 14px 13px 40px; border-radius:15px; border:1px solid var(--line);
+  background:var(--card); color:var(--text); font-size:15.5px; outline:none; appearance:none;
+}
+.search input::-webkit-search-cancel-button{appearance:none}
+.search input:focus{border-color:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent)}
+
+/* ---------- chips ---------- */
+.chips{display:flex; gap:8px; overflow-x:auto; padding:6px 0 12px; scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(to right, #000 0, #000 calc(100% - 26px), transparent 100%);
+  mask-image:linear-gradient(to right, #000 0, #000 calc(100% - 26px), transparent 100%);
+}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto; padding:8px 13px; border-radius:999px; border:1px solid var(--line);
+  background:var(--chip); font-size:13px; white-space:nowrap; color:var(--text);
+  transition:background .18s, color .18s, border-color .18s, transform .12s;
+}
+.chip:active{transform:scale(.96)}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff}
+.chip .cnt{opacity:.55; font-size:11.5px; margin-left:3px}
+.chip.sm{font-size:12.5px; padding:7px 12px}
+
+/* ---------- list ---------- */
+.list{display:grid; grid-template-columns:1fr; gap:8px; padding-bottom:8px}
+@media (min-width:780px){ .list{grid-template-columns:1fr 1fr; gap:10px} }
+.item{
+  position:relative; display:flex; align-items:center; gap:10px; text-align:left; width:100%;
+  padding:11px 8px 11px 14px; border:1px solid var(--line); border-radius:16px; background:var(--card);
+  box-shadow:var(--shadow); transition:transform .12s ease, border-color .2s;
+}
+.item:active{transform:scale(.99)}
+.item .txt{flex:1; min-width:0}
+.item .n{display:block; font-size:14.5px; font-weight:600; line-height:1.25}
+.item .m{display:block; font-size:12px; color:var(--muted); margin-top:3px}
+.item .star{
+  flex:0 0 auto; width:40px; height:40px; border-radius:12px; display:grid; place-items:center;
+  font-size:19px; line-height:1; color:var(--muted); background:transparent; border:0;
+}
+.item .star.on{color:var(--accent2); background:color-mix(in srgb, var(--accent2) 14%, transparent)}
+.empty{text-align:center; color:var(--muted); font-size:14px; padding:32px 0}
+
+/* ---------- recipe ---------- */
+.r-head{display:flex; gap:8px; align-items:flex-start; margin:16px 0 4px}
+.r-head .grow{flex:1; min-width:0}
+.r-head h2{font-size:21px; line-height:1.2}
+.meta{font-size:12px; color:var(--muted); margin-top:4px}
+.meta .src{color:var(--accent); text-decoration:underline; text-underline-offset:2px}
+.controls{display:flex; flex-direction:column; gap:8px; margin:12px 0}
+.seg{display:inline-flex; align-self:flex-start; background:var(--section); border-radius:12px; padding:3px; gap:2px}
+.seg button{
+  padding:7px 15px; border-radius:9px; font-size:12.5px; color:var(--muted);
+  transition:background .18s, color .18s, box-shadow .18s;
+}
+.seg button[aria-pressed="true"]{
+  background:var(--card); color:var(--text); font-weight:600;
+  box-shadow:0 1px 2px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.06);
+}
+.sizes{display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none}
+.sizes::-webkit-scrollbar{display:none}
+.recipe[data-unit="g"] .unit-m, .recipe[data-unit="g"] .note-m{display:none}
+.recipe[data-unit="m"] .unit-g, .recipe[data-unit="m"] .note-g{display:none}
+.tbl-wrap{border:1px solid var(--line); border-radius:18px; background:var(--card); overflow:hidden; box-shadow:var(--shadow)}
+.tbl{width:100%; border-collapse:collapse; font-size:13.5px}
+.tbl th{
+  text-align:left; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted);
+  font-weight:700; padding:11px 10px; border-bottom:1px solid var(--line); background:var(--card);
+}
+.tbl th.num{text-align:right; white-space:nowrap; letter-spacing:.02em}
+.tbl td{padding:10px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+.tbl td.dim{color:var(--muted); font-size:12px}
+.tbl.measure td.q{text-align:center; font-size:12.5px; line-height:1.35}
+.tbl.measure td.q.dim{color:var(--muted); font-size:11.5px}
+.tbl.measure th.num{text-align:center}
+.tbl.measure:not(.m-all) td.q, .tbl.measure:not(.m-all) th.num{min-width:116px}
+.tbl tr.sec td{background:var(--section); font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--accent); font-weight:700; padding:7px 10px}
+.tbl tr.total td{background:var(--total); font-weight:650}
+.note{color:var(--muted); font-size:11.5px; margin:10px 2px 26px}
+
+/* ---------- modo de preparo / dicas ---------- */
+.steps-card, .tips-card{
+  border:1px solid var(--line); border-radius:18px; background:var(--card);
+  padding:16px 16px 6px; box-shadow:var(--shadow); margin:0 0 12px;
+}
+.tips-card{background:var(--section); padding-bottom:12px}
+.block-title{
+  font-size:11px; letter-spacing:.09em; text-transform:uppercase; font-weight:700;
+  color:var(--muted); margin:0 0 12px;
+}
+.tips-card .block-title{color:var(--accent2)}
+.steps{list-style:none; margin:0; padding:0; counter-reset:step}
+.steps li{
+  position:relative; padding:0 0 15px 36px; counter-increment:step;
+  font-size:14px; line-height:1.45;
+}
+.steps li::before{
+  content:counter(step); position:absolute; left:0; top:-1px; width:24px; height:24px;
+  border-radius:50%; background:var(--section); color:var(--accent);
+  font-size:11.5px; font-weight:700; display:grid; place-items:center;
+}
+.steps li:last-child{padding-bottom:12px}
+.tips{list-style:none; margin:0; padding:0}
+.tips li{position:relative; padding:0 0 9px 16px; font-size:13px; line-height:1.45}
+.tips li::before{
+  content:""; position:absolute; left:2px; top:8px; width:5px; height:5px;
+  border-radius:50%; background:var(--accent2);
+}
+.tips li:last-child{padding-bottom:2px}
+
+/* size column visibility */
+.tbl.m-all [data-size]{}
+
+
+/* ---------- cycles ---------- */
+.cycles{display:flex; flex-direction:column; gap:10px; margin:6px 0 10px}
+.ccard{border:1px solid var(--line); border-radius:18px; background:var(--card); padding:14px; box-shadow:var(--shadow)}
+.ccard header{display:flex; align-items:center; gap:10px; margin-bottom:10px}
+.ccard .code{
+  font-size:11.5px; font-weight:700; letter-spacing:.04em; color:#fff; background:var(--accent);
+  padding:4px 8px; border-radius:8px;
+}
+.ccard h3{font-size:15.5px}
+.cvar{border-top:1px solid var(--line); padding-top:10px; margin-top:10px}
+.cvar:first-of-type{border-top:0; padding-top:0; margin-top:0}
+.csize{font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:7px}
+.stages{display:grid; grid-template-columns:repeat(3, 1fr); gap:6px}
+@media (min-width:560px){ .stages{grid-template-columns:repeat(4, 1fr)} }
+.st{background:var(--section); border-radius:10px; padding:7px 8px}
+.st span{display:block; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em}
+.st b{display:block; font-size:13px; margin-top:2px; font-variant-numeric:tabular-nums}
+.st.assa{background:color-mix(in srgb, var(--accent2) 14%, var(--section))}
+.ctotal{margin-top:9px; font-size:12.5px; color:var(--muted); display:flex; justify-content:space-between; align-items:baseline}
+.ctotal b{font-size:14px; color:var(--text)}
+
+/* ---------- sobre ---------- */
+.sobre p{font-size:14px; color:var(--text); margin:0 0 10px}
+.sobre h3{font-size:14px; margin:20px 0 8px; color:var(--accent)}
+.tbl.plain td{padding:9px 12px}
+.tbl.plain td:first-child{color:var(--text)}
+.tbl.plain td.num{color:var(--muted)}
+
+/* ---------- tab bar ---------- */
+.tabbar{
+  position:fixed; left:0; right:0; bottom:0; z-index:50; display:grid; grid-template-columns:repeat(2,1fr);
+  background:color-mix(in srgb, var(--card) 92%, transparent); backdrop-filter:blur(14px) saturate(1.4);
+  border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom);
+}
+.tab{display:flex; flex-direction:column; align-items:center; gap:3px; padding:9px 0 7px; color:var(--muted); font-size:10.5px}
+.tab svg{width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+.tab[aria-selected="true"]{color:var(--accent)}
+.tab[aria-selected="true"] svg{stroke-width:2.1}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed; left:50%; bottom:calc(88px + env(safe-area-inset-bottom)); transform:translate(-50%, 12px);
+  background:#2b2320; color:#fff; font-size:13px; padding:10px 16px; border-radius:999px;
+  opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:60; max-width:86vw; text-align:center;
+}
+.toast.show{opacity:1; transform:translate(-50%, 0)}
+
+/* ---------- share sheet ---------- */
+.sheet-wrap{position:fixed; inset:0; z-index:80; display:flex; align-items:flex-end; justify-content:center}
+.sheet-backdrop{position:absolute; inset:0; background:rgba(18,14,11,.45); backdrop-filter:blur(2px); animation:fade .18s ease}
+.sheet{
+  position:relative; width:100%; max-width:520px; background:var(--card);
+  border-radius:22px 22px 0 0; padding:8px 12px calc(12px + env(safe-area-inset-bottom));
+  box-shadow:0 -10px 40px rgba(0,0,0,.28); animation:sheetUp .22s cubic-bezier(.2,.8,.3,1);
+}
+@media (min-width:560px){ .sheet{border-radius:22px; margin-bottom:32px} }
+.sheet-handle{width:38px; height:4px; border-radius:99px; background:var(--line); margin:6px auto 8px}
+.sheet h3{font-size:11.5px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted); margin:0 6px 6px}
+.sheet-item{display:flex; gap:12px; align-items:center; width:100%; padding:11px 8px; border-radius:14px; text-align:left}
+.sheet-item:active{background:var(--section)}
+.sheet-item .si{flex:0 0 auto; width:42px; height:42px; border-radius:13px; display:grid; place-items:center; background:var(--section); color:var(--accent)}
+.sheet-item .si svg{width:21px; height:21px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.sheet-item b{display:block; font-size:14.5px; font-weight:600}
+.sheet-item small{display:block; font-size:11.8px; color:var(--muted); margin-top:2px}
+.sheet-cancel{width:100%; margin-top:6px; padding:13px; border-radius:14px; background:var(--section); font-weight:600; font-size:14px}
+body.sheet-open{overflow:hidden}
+@keyframes sheetUp{from{transform:translateY(14px); opacity:.6} to{transform:none; opacity:1}}
+@keyframes fade{from{opacity:0} to{opacity:1}}
+
+@media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
+</style>
+</head>
+<body>
+
+<noscript>
+  <div style="background:#b9563b;color:#fff;padding:10px 14px;font:13px/1.4 system-ui,sans-serif">
+    Ative o JavaScript para abrir as receitas e usar a busca.
+  </div>
+</noscript>
+
+<header class="topbar" id="topbar">
+  <button class="icon-btn" id="back" aria-label="Voltar" hidden>
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+  </button>
+  <div class="titles">
+    <h1 id="title">Receitas</h1>
+    <p id="sub">5 receitas</p>
+  </div>
+  <button class="icon-btn" id="theme" aria-label="Alternar tema claro e escuro">
+    <svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+  </button>
+</header>
+
+<main>
+  <section class="screen" id="screen-home">
+    <div class="wrap">
+      <div class="hero hero-plain">
+        <div>
+          <strong>Receitas</strong>
+          <span>Receitas reunidas em vídeos e testadas na cozinha, com os ingredientes em gramas ou nas medidas de copo e colher.</span>
+          <span class="pill">5 receitas</span>
+        </div>
+      </div>
+
+      <label class="search" for="q">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>
+        <input id="q" type="search" placeholder="Buscar receita ou ingrediente" autocomplete="off" enterkeyhint="search">
+      </label>
+
+      <div class="chips" id="chips" role="group" aria-label="Categorias"><button class="chip" data-cat="Todos" aria-pressed="true">Todas</button><button class="chip" data-cat="Favoritas" aria-pressed="false">★ Favoritas</button><button class="chip" data-cat="Aves" aria-pressed="false">Aves <span class="cnt">1</span></button><button class="chip" data-cat="Acompanhamentos" aria-pressed="false">Acompanhamentos <span class="cnt">2</span></button><button class="chip" data-cat="Doces" aria-pressed="false">Doces <span class="cnt">1</span></button><button class="chip" data-cat="Carnes" aria-pressed="false">Carnes <span class="cnt">1</span></button></div>
+
+      <div class="list" id="list">
+      <div class="item" role="button" tabindex="0" data-id="0" data-cat="Aves" data-search="frango agridoce e picante aves como faz — leo abreu frango (meio da asa, asa ou coxa) shoyu ketchup mel oleo de gergelim paprica defumada pimenta caiena alho em po gengibre em po coentro em po sal pimenta-do-reino raspas de limao suco de limao gergelim cebolinha" data-fav="0">
+        <span class="txt">
+          <span class="n">Frango agridoce e picante</span>
+          <span class="m">Aves · Como faz — Léo Abreu</span>
+        </span>
+        <button class="star" data-id="0" aria-label="Favoritar Frango agridoce e picante" aria-pressed="false">☆</button>
+      </div>
+      <div class="item" role="button" tabindex="0" data-id="1" data-cat="Acompanhamentos" data-search="feijao cremoso com bacon e alho acompanhamentos ana zambrin feijao carioca cru bacon azeite alho agua sal coentro ou pimenta (opcional)" data-fav="0">
+        <span class="txt">
+          <span class="n">Feijão cremoso com bacon e alho</span>
+          <span class="m">Acompanhamentos · Ana Zambrin</span>
+        </span>
+        <button class="star" data-id="1" aria-label="Favoritar Feijão cremoso com bacon e alho" aria-pressed="false">☆</button>
+      </div>
+      <div class="item" role="button" tabindex="0" data-id="2" data-cat="Doces" data-search="petit gateau de doce de leite doces leonardo abreu doce de leite ovo gemas acucar farinha de trigo manteiga baunilha sal conhaque (opcional)" data-fav="0">
+        <span class="txt">
+          <span class="n">Petit gateau de doce de leite</span>
+          <span class="m">Doces · Leonardo Abreu</span>
+        </span>
+        <button class="star" data-id="2" aria-label="Favoritar Petit gateau de doce de leite" aria-pressed="false">☆</button>
+      </div>
+      <div class="item" role="button" tabindex="0" data-id="3" data-cat="Carnes" data-search="chilli con carne com salsa caseira carnes leonardo abreu tomate (para a salsa) pimenta de cheiro pimenta dedo-de-moca pimentao vermelho azeite (salsa) sal pimenta-do-reino tomate cebola alho salsao manteiga louro carne moida sementes de coentro cominho paprica defumada feijao vermelho cozido extrato de tomate azeite (chili) pimenta calabresa cebolinha coentro" data-fav="0">
+        <span class="txt">
+          <span class="n">Chilli con carne com salsa caseira</span>
+          <span class="m">Carnes · Leonardo Abreu</span>
+        </span>
+        <button class="star" data-id="3" aria-label="Favoritar Chilli con carne com salsa caseira" aria-pressed="false">☆</button>
+      </div>
+      <div class="item" role="button" tabindex="0" data-id="4" data-cat="Acompanhamentos" data-search="creme de milho cremoso acompanhamentos ana zambrin manteiga azeite cebola grande alho farinha de trigo milho em lata (escorrido) leite creme de leite sal noz-moscada pimenta-do-reino cebolinha" data-fav="0">
+        <span class="txt">
+          <span class="n">Creme de milho cremoso</span>
+          <span class="m">Acompanhamentos · Ana Zambrin</span>
+        </span>
+        <button class="star" data-id="4" aria-label="Favoritar Creme de milho cremoso" aria-pressed="false">☆</button>
+      </div></div>
+      <p class="empty" id="empty" hidden>Nenhuma receita encontrada.</p>
+    </div>
+  </section>
+
+
+  <section class="screen sobre" id="screen-sobre" hidden>
+    <div class="wrap">
+      <p class="lead">Uma coleção de receitas reunidas em vídeos e testadas na cozinha. Cada receita traz a lista de ingredientes, o modo de preparo e, quando indicado, as dicas — com as quantidades convertidas em gramas ou nas medidas de copo e colher.</p>
+      <p>Em cada receita você pode alternar entre <strong>Gramas</strong> e <strong>Medidas</strong>. A visão “Medidas” mostra as quantidades originais (copos, colheres, gramas e mililitros); a visão “Gramas” converte tudo para uma balança de cozinha.</p>
+      <p>Para enviar a alguém, toque no ícone de compartilhar da receita: dá para mandar o <strong>app completo em .html</strong> (a pessoa abre no navegador e tem todas as receitas) ou só a receita como <strong>imagem</strong>, que aparece direto na conversa do WhatsApp.</p>
+      <p>Cada receita indica a fonte: o canal e o link do vídeo de onde ela veio.</p>
+
+      <h3>Medidas usadas na conversão</h3>
+      <div class="tbl-wrap">
+        <table class="tbl plain"><tbody><tr><td>1 copo medidor</td><td class="num">240 ml</td></tr><tr><td>1 colher de sopa</td><td class="num">15 ml</td></tr><tr><td>1 colher de chá</td><td class="num">5 ml</td></tr><tr><td>1 colher de café</td><td class="num">2 ml</td></tr><tr><td>1 pitada</td><td class="num">1 g</td></tr><tr><td>1 ovo</td><td class="num">50 g (sem casca)</td></tr><tr><td>1 gema</td><td class="num">20 g</td></tr><tr><td>1 xícara (quando não informada)</td><td class="num">240 ml</td></tr></tbody></table>
+      </div>
+
+      <h3>Observações</h3>
+      <p>Quando a receita original cita “1 copo” ou “1 xícara” sem informar o volume, consideramos 240 ml (o copo medidor padrão). Se o vídeo usar outro volume, isso é anotado na receita.</p>
+      <p>Ingredientes marcados como “a gosto” não têm quantidade fixa na receita original. A “soma dos ingredientes” ao final de cada receita é apenas uma referência.</p>
+      <p class="note">Receitas de vídeos de cozinha, com a fonte indicada em cada uma.</p>
+    </div>
+  </section>
+
+  
+    <section class="screen recipe" id="r-0" data-name="Frango agridoce e picante" data-unit="g" hidden>
+      <div class="wrap">
+        <div class="r-head">
+          <div class="grow">
+            <h2>Frango agridoce e picante</h2>
+            <div class="meta">Aves · <a class="src" href="https://www.youtube.com/watch?v=xp70JBfOzP8" target="_blank" rel="noopener">Vídeo: Como faz — Léo Abreu</a></div>
+          </div>
+          <button class="icon-btn star" data-id="0" aria-label="Favoritar Frango agridoce e picante" aria-pressed="false">☆</button>
+          <button class="icon-btn share" data-id="0" aria-label="Compartilhar Frango agridoce e picante"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
+        </div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Formato das quantidades">
+            <button data-unit="g" aria-pressed="true">Gramas</button>
+            <button data-unit="m" aria-pressed="false">Medidas</button>
+          </div>
+        </div>
+        <div class="tbl-wrap unit-g">
+          <table class="tbl" data-mode="all" data-id="0">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade (g)</th></tr></thead>
+            <tbody><tr><td data-size="ing">Frango (meio da asa, asa ou coxa)</td><td class="num" data-size="0">1000</td></tr><tr><td data-size="ing">Shoyu</td><td class="num" data-size="0">108</td></tr><tr><td data-size="ing">Ketchup</td><td class="num" data-size="0">33</td></tr><tr><td data-size="ing">Mel</td><td class="num" data-size="0">42</td></tr><tr><td data-size="ing">Óleo de gergelim</td><td class="num" data-size="0">14</td></tr><tr><td data-size="ing">Páprica defumada</td><td class="num" data-size="0">3</td></tr><tr><td data-size="ing">Pimenta caiena</td><td class="num" data-size="0">3</td></tr><tr><td data-size="ing">Alho em pó</td><td class="num" data-size="0">3</td></tr><tr><td data-size="ing">Gengibre em pó</td><td class="num" data-size="0">3</td></tr><tr><td data-size="ing">Coentro em pó</td><td class="num" data-size="0">3</td></tr><tr><td data-size="ing">Sal</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Pimenta-do-reino</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Raspas de limão</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Suco de limão</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Gergelim</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Cebolinha</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="total"><td data-size="ing">Soma dos ingredientes</td><td class="num" data-size="0">1212</td></tr></tbody>
+          </table>
+        </div>
+        <div class="tbl-wrap unit-m">
+          <table class="tbl measure" data-mode="all" data-id="0">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade</th></tr></thead>
+            <tbody><tr><td data-size="ing">Frango (meio da asa, asa ou coxa)</td><td class="q" data-size="0">1 kg</td></tr><tr><td data-size="ing">Shoyu</td><td class="q" data-size="0">6 colheres (sopa)</td></tr><tr><td data-size="ing">Ketchup</td><td class="q" data-size="0">2 colheres (sopa)</td></tr><tr><td data-size="ing">Mel</td><td class="q" data-size="0">2 colheres (sopa)</td></tr><tr><td data-size="ing">Óleo de gergelim</td><td class="q" data-size="0">1 colher (sopa)</td></tr><tr><td data-size="ing">Páprica defumada</td><td class="q" data-size="0">1 colher (chá)</td></tr><tr><td data-size="ing">Pimenta caiena</td><td class="q" data-size="0">1 colher (chá)</td></tr><tr><td data-size="ing">Alho em pó</td><td class="q" data-size="0">1 colher (chá)</td></tr><tr><td data-size="ing">Gengibre em pó</td><td class="q" data-size="0">1 colher (chá)</td></tr><tr><td data-size="ing">Coentro em pó</td><td class="q" data-size="0">1 colher (chá)</td></tr><tr><td data-size="ing">Sal</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Pimenta-do-reino</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Raspas de limão</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Suco de limão</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Gergelim</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Cebolinha</td><td class="q dim" data-size="0">a gosto</td></tr></tbody>
+          </table>
+        </div>
+        <p class="note note-g">Quantidades em gramas. “a gosto” = sem quantidade fixa na receita original.</p>
+        <p class="note note-m">Medidas como na receita original (copos, colheres, gramas e mililitros). “a gosto” = sem quantidade fixa.</p>
+        
+        <div class="steps-card">
+          <h3 class="block-title">Modo de preparo</h3>
+          <ol class="steps"><li>Temperar o frango com sal, pimenta-do-reino, coentro em pó, alho em pó, pimenta caiena, páprica defumada e gengibre em pó, esfregando bem em todos os lados.</li><li>Usar meio da asa, asa ou coxa — evitar peito, que fica seco nesse preparo.</li><li>Dispor o frango em uma assadeira antiaderente, com a pele virada para cima, sem acrescentar óleo ou gordura.</li><li>Assar em forno preaquecido a 180 °C até a carne ficar parcialmente cozida.</li><li>Preparar o molho: misturar o shoyu, o ketchup, o mel, o óleo de gergelim, as raspas e o suco de limão.</li><li>Depois de cerca de 20 minutos, pincelar o molho sobre o frango e voltar ao forno.</li><li>Repetir a pincelada mais três vezes, até o frango caramelizar e ficar brilhante.</li><li>Finalizar com gergelim e cebolinha picada e servir.</li></ol>
+        </div>
+        <div class="tips-card">
+          <h3 class="block-title">Dicas</h3>
+          <ul class="tips"><li>A marinada é seca: o tempero age em pouco tempo, não precisa deixar o frango marinando por horas.</li><li>Prefira meio da asa, asa ou coxa; o peito fica seco nesse tipo de preparo.</li><li>Não é preciso untar a assadeira: a própria pele do frango solta gordura.</li><li>O limão (raspas e suco) é citado no vídeo, mas não está na lista da descrição; o mel está na descrição e foi mantido no molho.</li></ul>
+        </div>
+      </div>
+    </section>
+    <section class="screen recipe" id="r-1" data-name="Feijão cremoso com bacon e alho" data-unit="g" hidden>
+      <div class="wrap">
+        <div class="r-head">
+          <div class="grow">
+            <h2>Feijão cremoso com bacon e alho</h2>
+            <div class="meta">Acompanhamentos · <a class="src" href="https://www.youtube.com/watch?v=akjiGrH0OZM" target="_blank" rel="noopener">Vídeo: Ana Zambrin</a></div>
+          </div>
+          <button class="icon-btn star" data-id="1" aria-label="Favoritar Feijão cremoso com bacon e alho" aria-pressed="false">☆</button>
+          <button class="icon-btn share" data-id="1" aria-label="Compartilhar Feijão cremoso com bacon e alho"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
+        </div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Formato das quantidades">
+            <button data-unit="g" aria-pressed="true">Gramas</button>
+            <button data-unit="m" aria-pressed="false">Medidas</button>
+          </div>
+        </div>
+        <div class="tbl-wrap unit-g">
+          <table class="tbl" data-mode="all" data-id="1">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade (g)</th></tr></thead>
+            <tbody><tr><td data-size="ing">Feijão carioca cru</td><td class="num" data-size="0">400</td></tr><tr><td data-size="ing">Bacon</td><td class="num" data-size="0">200</td></tr><tr><td data-size="ing">Azeite</td><td class="num" data-size="0">41</td></tr><tr><td data-size="ing">Alho</td><td class="num" data-size="0">24</td></tr><tr><td data-size="ing">Água</td><td class="num" data-size="0">1000</td></tr><tr><td data-size="ing">Sal</td><td class="num" data-size="0">6</td></tr><tr><td data-size="ing">Coentro ou pimenta (opcional)</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="total"><td data-size="ing">Soma dos ingredientes</td><td class="num" data-size="0">1671</td></tr></tbody>
+          </table>
+        </div>
+        <div class="tbl-wrap unit-m">
+          <table class="tbl measure" data-mode="all" data-id="1">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade</th></tr></thead>
+            <tbody><tr><td data-size="ing">Feijão carioca cru</td><td class="q" data-size="0">400 g</td></tr><tr><td data-size="ing">Bacon</td><td class="q" data-size="0">200 g</td></tr><tr><td data-size="ing">Azeite</td><td class="q" data-size="0">3 colheres (sopa)</td></tr><tr><td data-size="ing">Alho</td><td class="q" data-size="0">8 dentes</td></tr><tr><td data-size="ing">Água</td><td class="q" data-size="0">1 L</td></tr><tr><td data-size="ing">Sal</td><td class="q" data-size="0">2 colheres (café)</td></tr><tr><td data-size="ing">Coentro ou pimenta (opcional)</td><td class="q dim" data-size="0">a gosto</td></tr></tbody>
+          </table>
+        </div>
+        <p class="note note-g">Quantidades em gramas. “a gosto” = sem quantidade fixa na receita original.</p>
+        <p class="note note-m">Medidas como na receita original (copos, colheres, gramas e mililitros). “a gosto” = sem quantidade fixa.</p>
+        
+        <div class="steps-card">
+          <h3 class="block-title">Modo de preparo</h3>
+          <ol class="steps"><li>Deixar o feijão de molho por 12 horas (mínimo) e descartar a água. Se esquecer, dá certo também — use mais água no cozimento.</li><li>Aquecer a panela de pressão, juntar o bacon picado e o azeite e dourar bem (cerca de 4 minutos), até soltar a gordura e formar o fundinho de panela.</li><li>Juntar o alho picado e deixar dourar levemente — não pode ficar cru nem queimar.</li><li>Escorrer o feijão e colocar na panela.</li><li>Acrescentar 1 L de água: a água deve ficar 2 a 3 dedos acima do feijão (se não ficou de molho, até 4 dedos).</li><li>Não colocar sal agora — o sal atrapalha o cozimento dos grãos.</li><li>Tampar a panela de pressão, levar ao fogo alto até pegar pressão e contar 15 minutos em fogo baixo.</li><li>Tirar a pressão devagar e abrir. Se o caldo estiver secando, acrescentar água quente (cerca de 1 dedo acima do feijão) e voltar à pressão por mais 5 minutos.</li><li>Com a panela aberta, ferver em fogo alto por 5 a 10 minutos, mexendo a cada 1 ou 2 minutos, para engrossar o caldo.</li><li>É agora que entra o sal: cerca de 2 colheres (café) para essa quantidade. Se quiser, junte coentro ou pimenta.</li><li>Desligar e deixar descansar por 5 minutos antes de servir.</li></ol>
+        </div>
+        <div class="tips-card">
+          <h3 class="block-title">Dicas</h3>
+          <ul class="tips"><li>Deixar o feijão de molho por 12 horas reduz os gases; sem molho também funciona, mas use mais água.</li><li>Sem cebola, o feijão dura até 5 dias na geladeira; com cebola, o ideal é consumir em até 3 dias.</li><li>O sal entra só no final, quando o caldo já está engrossando.</li><li>A descrição do vídeo lista 150 g de bacon, mas no vídeo ela usa 200 g — seguimos os 200 g do vídeo.</li><li>Dá para trocar o bacon por linguiça calabresa, ou fazer só com alho e azeite.</li></ul>
+        </div>
+      </div>
+    </section>
+    <section class="screen recipe" id="r-2" data-name="Petit gateau de doce de leite" data-unit="g" hidden>
+      <div class="wrap">
+        <div class="r-head">
+          <div class="grow">
+            <h2>Petit gateau de doce de leite</h2>
+            <div class="meta">Doces · <a class="src" href="https://www.youtube.com/watch?v=V1vJlTGH17I" target="_blank" rel="noopener">Vídeo: Leonardo Abreu</a></div>
+          </div>
+          <button class="icon-btn star" data-id="2" aria-label="Favoritar Petit gateau de doce de leite" aria-pressed="false">☆</button>
+          <button class="icon-btn share" data-id="2" aria-label="Compartilhar Petit gateau de doce de leite"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
+        </div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Formato das quantidades">
+            <button data-unit="g" aria-pressed="true">Gramas</button>
+            <button data-unit="m" aria-pressed="false">Medidas</button>
+          </div>
+        </div>
+        <div class="tbl-wrap unit-g">
+          <table class="tbl" data-mode="all" data-id="2">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade (g)</th></tr></thead>
+            <tbody><tr><td data-size="ing">Doce de leite</td><td class="num" data-size="0">300</td></tr><tr><td data-size="ing">Ovo</td><td class="num" data-size="0">50</td></tr><tr><td data-size="ing">Gemas</td><td class="num" data-size="0">40</td></tr><tr><td data-size="ing">Açúcar</td><td class="num" data-size="0">24</td></tr><tr><td data-size="ing">Farinha de trigo</td><td class="num" data-size="0">30</td></tr><tr><td data-size="ing">Manteiga</td><td class="num" data-size="0">20</td></tr><tr><td data-size="ing">Baunilha</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Sal</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Conhaque (opcional)</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="total"><td data-size="ing">Soma dos ingredientes</td><td class="num" data-size="0">464</td></tr></tbody>
+          </table>
+        </div>
+        <div class="tbl-wrap unit-m">
+          <table class="tbl measure" data-mode="all" data-id="2">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade</th></tr></thead>
+            <tbody><tr><td data-size="ing">Doce de leite</td><td class="q" data-size="0">300 g</td></tr><tr><td data-size="ing">Ovo</td><td class="q" data-size="0">1</td></tr><tr><td data-size="ing">Gemas</td><td class="q" data-size="0">2</td></tr><tr><td data-size="ing">Açúcar</td><td class="q" data-size="0">2 colheres (sopa)</td></tr><tr><td data-size="ing">Farinha de trigo</td><td class="q" data-size="0">30 g</td></tr><tr><td data-size="ing">Manteiga</td><td class="q" data-size="0">20 g</td></tr><tr><td data-size="ing">Baunilha</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Sal</td><td class="q" data-size="0">1 pitada generosa</td></tr><tr><td data-size="ing">Conhaque (opcional)</td><td class="q dim" data-size="0">a gosto</td></tr></tbody>
+          </table>
+        </div>
+        <p class="note note-g">Quantidades em gramas. “a gosto” = sem quantidade fixa na receita original.</p>
+        <p class="note note-m">Medidas como na receita original (copos, colheres, gramas e mililitros). “a gosto” = sem quantidade fixa.</p>
+        
+        <div class="steps-card">
+          <h3 class="block-title">Modo de preparo</h3>
+          <ol class="steps"><li>Derreter a manteiga no micro-ondas ou em uma panelinha e reservar.</li><li>Numa tigela, juntar a manteiga derretida, o ovo, as gemas, o açúcar, a baunilha, uma pitada generosa de sal e o conhaque (opcional).</li><li>Misturar bem todos os ingredientes líquidos.</li><li>Peneirar a farinha sobre a mistura e mexer até ficar homogêneo.</li><li>Untar as forminhas com manteiga e farinha — no petit gateau de chocolate, cacau no lugar da farinha preserva a cor.</li><li>Distribuir a massa nas forminhas, sem encher até a borda.</li><li>Aquecer o forno a 240 °C (bem preaquecido) antes de assar.</li><li>Assar de olho: forminhas pequenas ficam prontas em cerca de 5 minutos, ramequins médios em 8 e formas maiores em até 11 minutos.</li><li>Na metade do tempo, girar a assadeira — e repetir de 4 em 4 ou 5 em 5 minutos, porque o forno doméstico assa mais no fundo.</li><li>Testar com o dedo: o centro deve ceder e ficar líquido; se as bordas estufarem e o meio afundar de leve, está no ponto.</li><li>Servir quente, no próprio ramequim, com uma bola de sorvete.</li></ol>
+        </div>
+        <div class="tips-card">
+          <h3 class="block-title">Dicas</h3>
+          <ul class="tips"><li>O ponto é no olho: cada forno trabalha de um jeito, então teste uma forminha antes de assar a fornada inteira.</li><li>Forminhas pequenas assam muito rápido (cerca de 5 minutos); as maiores levam de 8 a 11 minutos.</li><li>Girar a assadeira na metade do tempo ajuda a assar por igual.</li><li>Se passar do ponto, o petit gateau fica cremoso no meio — sirva no ramequim que ninguém percebe.</li><li>Conhaque é opcional e a baunilha vai a gosto; nenhum dos dois está na lista da descrição.</li></ul>
+        </div>
+      </div>
+    </section>
+    <section class="screen recipe" id="r-3" data-name="Chilli con carne com salsa caseira" data-unit="g" hidden>
+      <div class="wrap">
+        <div class="r-head">
+          <div class="grow">
+            <h2>Chilli con carne com salsa caseira</h2>
+            <div class="meta">Carnes · <a class="src" href="https://www.youtube.com/watch?v=78d0BBht0lo" target="_blank" rel="noopener">Vídeo: Leonardo Abreu</a></div>
+          </div>
+          <button class="icon-btn star" data-id="3" aria-label="Favoritar Chilli con carne com salsa caseira" aria-pressed="false">☆</button>
+          <button class="icon-btn share" data-id="3" aria-label="Compartilhar Chilli con carne com salsa caseira"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
+        </div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Formato das quantidades">
+            <button data-unit="g" aria-pressed="true">Gramas</button>
+            <button data-unit="m" aria-pressed="false">Medidas</button>
+          </div>
+        </div>
+        <div class="tbl-wrap unit-g">
+          <table class="tbl" data-mode="all" data-id="3">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade (g)</th></tr></thead>
+            <tbody><tr class="sec"><td colspan="2">SALSA</td></tr><tr><td data-size="ing">Tomate (para a salsa)</td><td class="num" data-size="0">480</td></tr><tr><td data-size="ing">Pimenta de cheiro</td><td class="num" data-size="0">5</td></tr><tr><td data-size="ing">Pimenta dedo-de-moça</td><td class="num" data-size="0">8</td></tr><tr><td data-size="ing">Pimentão vermelho</td><td class="num" data-size="0">150</td></tr><tr><td data-size="ing">Azeite (salsa)</td><td class="num" data-size="0">14</td></tr><tr><td data-size="ing">Sal</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Pimenta-do-reino</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="sec"><td colspan="2">CHILI</td></tr><tr><td data-size="ing">Tomate</td><td class="num" data-size="0">60</td></tr><tr><td data-size="ing">Cebola</td><td class="num" data-size="0">100</td></tr><tr><td data-size="ing">Alho</td><td class="num" data-size="0">6</td></tr><tr><td data-size="ing">Salsão</td><td class="num" data-size="0">30</td></tr><tr><td data-size="ing">Manteiga</td><td class="num" data-size="0">10</td></tr><tr><td data-size="ing">Louro</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Carne moída</td><td class="num" data-size="0">350</td></tr><tr><td data-size="ing">Sementes de coentro</td><td class="num" data-size="0">2</td></tr><tr><td data-size="ing">Cominho</td><td class="num" data-size="0">1</td></tr><tr><td data-size="ing">Páprica defumada</td><td class="num" data-size="0">2</td></tr><tr><td data-size="ing">Feijão vermelho cozido</td><td class="num" data-size="0">200</td></tr><tr><td data-size="ing">Extrato de tomate</td><td class="num" data-size="0">16</td></tr><tr><td data-size="ing">Azeite (chili)</td><td class="num" data-size="0">14</td></tr><tr><td data-size="ing">Pimenta calabresa</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Cebolinha</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Coentro</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="total"><td data-size="ing">Soma dos ingredientes</td><td class="num" data-size="0">1448</td></tr></tbody>
+          </table>
+        </div>
+        <div class="tbl-wrap unit-m">
+          <table class="tbl measure" data-mode="all" data-id="3">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade</th></tr></thead>
+            <tbody><tr class="sec"><td colspan="2">SALSA</td></tr><tr><td data-size="ing">Tomate (para a salsa)</td><td class="q" data-size="0">4</td></tr><tr><td data-size="ing">Pimenta de cheiro</td><td class="q" data-size="0">1</td></tr><tr><td data-size="ing">Pimenta dedo-de-moça</td><td class="q" data-size="0">1</td></tr><tr><td data-size="ing">Pimentão vermelho</td><td class="q" data-size="0">1</td></tr><tr><td data-size="ing">Azeite (salsa)</td><td class="q" data-size="0">1 colher (sopa)</td></tr><tr><td data-size="ing">Sal</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Pimenta-do-reino</td><td class="q dim" data-size="0">a gosto</td></tr><tr class="sec"><td colspan="2">CHILI</td></tr><tr><td data-size="ing">Tomate</td><td class="q" data-size="0">1/2</td></tr><tr><td data-size="ing">Cebola</td><td class="q" data-size="0">1</td></tr><tr><td data-size="ing">Alho</td><td class="q" data-size="0">2 dentes</td></tr><tr><td data-size="ing">Salsão</td><td class="q" data-size="0">1 talo</td></tr><tr><td data-size="ing">Manteiga</td><td class="q" data-size="0">10 g</td></tr><tr><td data-size="ing">Louro</td><td class="q" data-size="0">1 folha</td></tr><tr><td data-size="ing">Carne moída</td><td class="q" data-size="0">350 g</td></tr><tr><td data-size="ing">Sementes de coentro</td><td class="q" data-size="0">1 colher (chá)</td></tr><tr><td data-size="ing">Cominho</td><td class="q" data-size="0">1/2 colher (chá)</td></tr><tr><td data-size="ing">Páprica defumada</td><td class="q" data-size="0">1 colher (chá)</td></tr><tr><td data-size="ing">Feijão vermelho cozido</td><td class="q" data-size="0">1 xícara</td></tr><tr><td data-size="ing">Extrato de tomate</td><td class="q" data-size="0">1 colher (sopa)</td></tr><tr><td data-size="ing">Azeite (chili)</td><td class="q" data-size="0">1 colher (sopa)</td></tr><tr><td data-size="ing">Pimenta calabresa</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Cebolinha</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Coentro</td><td class="q dim" data-size="0">a gosto</td></tr></tbody>
+          </table>
+        </div>
+        <p class="note note-g">Quantidades em gramas. “a gosto” = sem quantidade fixa na receita original.</p>
+        <p class="note note-m">Medidas como na receita original (copos, colheres, gramas e mililitros). “a gosto” = sem quantidade fixa.</p>
+        
+        <div class="steps-card">
+          <h3 class="block-title">Modo de preparo</h3>
+          <ol class="steps"><li>Salsa: cortar os tomates ao meio e colocar numa assadeira com azeite, sal e pimenta-do-reino.</li><li>Juntar a pimenta de cheiro inteira e a dedo-de-moça — tirar a membrana se quiser dosar o ardor — e levar ao forno bem quente para tostar.</li><li>Tostar o pimentão vermelho direto na chama do fogão, girando com um garfo, até a pele ficar bem queimada: é isso que dá o sabor defumado.</li><li>Bater no mixer (ou liquidificador) os tomates tostados, as pimentas e o pimentão com as casquinhas, até formar um molho.</li><li>Chili: picar a cebola, o alho, meio tomate e o salsão em cubinhos.</li><li>Aquecer uma panela (de ferro, se tiver) com azeite, pimenta calabresa, pimenta-do-reino e a manteiga.</li><li>Refogar o salsão e a cebola com um pouco de sal; em seguida juntar o alho.</li><li>Juntar a carne moída, as sementes de coentro esmagadas, sal e pimenta-do-reino, e deixar fritar até dourar bem.</li><li>Quando a carne estiver bem dourada, juntar o tomate fresco, o cominho (pouco, ele é forte) e a páprica defumada.</li><li>Baixar o fogo e juntar o feijão vermelho cozido e o extrato de tomate; misturar.</li><li>Acrescentar a salsa e o líquido da assadeira, subir o fogo e apurar.</li><li>Desligar, juntar a cebolinha e um punhado generoso de coentro, e misturar.</li><li>Servir em cumbucas, com tortilhas ou nachos.</li></ol>
+        </div>
+        <div class="tips-card">
+          <h3 class="block-title">Dicas</h3>
+          <ul class="tips"><li>Tostar o pimentão na chama é o segredo do sabor defumado — não pule essa etapa.</li><li>Feijão vermelho cozido por 5 minutos na pressão fica com o grão íntegro; 10 minutos já desmancha.</li><li>O cominho é forte: use pouco, senão domina o prato.</li><li>Pode usar tomate salada no lugar do italiano — escolha os mais maduros.</li><li>O vídeo usa azeite, pimenta calabresa e cominho, que não estão na lista da descrição.</li></ul>
+        </div>
+      </div>
+    </section>
+    <section class="screen recipe" id="r-4" data-name="Creme de milho cremoso" data-unit="g" hidden>
+      <div class="wrap">
+        <div class="r-head">
+          <div class="grow">
+            <h2>Creme de milho cremoso</h2>
+            <div class="meta">Acompanhamentos · <a class="src" href="https://www.youtube.com/watch?v=ZdHG0ecL5nE" target="_blank" rel="noopener">Vídeo: Ana Zambrin</a></div>
+          </div>
+          <button class="icon-btn star" data-id="4" aria-label="Favoritar Creme de milho cremoso" aria-pressed="false">☆</button>
+          <button class="icon-btn share" data-id="4" aria-label="Compartilhar Creme de milho cremoso"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
+        </div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Formato das quantidades">
+            <button data-unit="g" aria-pressed="true">Gramas</button>
+            <button data-unit="m" aria-pressed="false">Medidas</button>
+          </div>
+        </div>
+        <div class="tbl-wrap unit-g">
+          <table class="tbl" data-mode="all" data-id="4">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade (g)</th></tr></thead>
+            <tbody><tr><td data-size="ing">Manteiga</td><td class="num" data-size="0">28</td></tr><tr><td data-size="ing">Azeite</td><td class="num" data-size="0">14</td></tr><tr><td data-size="ing">Cebola grande</td><td class="num" data-size="0">200</td></tr><tr><td data-size="ing">Alho</td><td class="num" data-size="0">12</td></tr><tr><td data-size="ing">Farinha de trigo</td><td class="num" data-size="0">10</td></tr><tr><td data-size="ing">Milho em lata (escorrido)</td><td class="num" data-size="0">300</td></tr><tr><td data-size="ing">Leite</td><td class="num" data-size="0">412</td></tr><tr><td data-size="ing">Creme de leite</td><td class="num" data-size="0">200</td></tr><tr><td data-size="ing">Sal</td><td class="num" data-size="0">5</td></tr><tr><td data-size="ing">Noz-moscada</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Pimenta-do-reino</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Cebolinha</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="total"><td data-size="ing">Soma dos ingredientes</td><td class="num" data-size="0">1181</td></tr></tbody>
+          </table>
+        </div>
+        <div class="tbl-wrap unit-m">
+          <table class="tbl measure" data-mode="all" data-id="4">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade</th></tr></thead>
+            <tbody><tr><td data-size="ing">Manteiga</td><td class="q" data-size="0">2 colheres (sopa)</td></tr><tr><td data-size="ing">Azeite</td><td class="q" data-size="0">1 colher (sopa)</td></tr><tr><td data-size="ing">Cebola grande</td><td class="q" data-size="0">1</td></tr><tr><td data-size="ing">Alho</td><td class="q" data-size="0">4 dentes</td></tr><tr><td data-size="ing">Farinha de trigo</td><td class="q" data-size="0">1 colher (sopa) cheia</td></tr><tr><td data-size="ing">Milho em lata (escorrido)</td><td class="q" data-size="0">2 latas de 150 g</td></tr><tr><td data-size="ing">Leite</td><td class="q" data-size="0">400 ml</td></tr><tr><td data-size="ing">Creme de leite</td><td class="q" data-size="0">200 ml</td></tr><tr><td data-size="ing">Sal</td><td class="q" data-size="0">1 colher (chá)</td></tr><tr><td data-size="ing">Noz-moscada</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Pimenta-do-reino</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Cebolinha</td><td class="q dim" data-size="0">a gosto</td></tr></tbody>
+          </table>
+        </div>
+        <p class="note note-g">Quantidades em gramas. “a gosto” = sem quantidade fixa na receita original.</p>
+        <p class="note note-m">Medidas como na receita original (copos, colheres, gramas e mililitros). “a gosto” = sem quantidade fixa.</p>
+        
+        <div class="steps-card">
+          <h3 class="block-title">Modo de preparo</h3>
+          <ol class="steps"><li>Derreter a manteiga com um fio de azeite e refogar a cebola picada com o alho até dourar e ficar translúcido.</li><li>Juntar 1 colher (sopa) cheia de farinha de trigo (ou amido de milho) e mexer bem; cozinhe bem para não ficar com gosto de farinha crua.</li><li>Bater no liquidificador a cebola refogada com a manteiga e a farinha, 2/3 do milho escorrido, o leite e o sal, até ficar homogêneo.</li><li>Voltar a mistura para a mesma panela, ligar em fogo baixo e juntar o restante do milho (para os pedaços) e a noz-moscada ralada.</li><li>Quando ferver, juntar o creme de leite e a pimenta-do-reino e misturar bem.</li><li>Cozinhar por 5 a 7 minutos em fogo baixo, mexendo de vez em quando, até engrossar.</li><li>Provar e corrigir o sal.</li><li>Finalizar com cebolinha picada e servir.</li></ol>
+        </div>
+        <div class="tips-card">
+          <h3 class="block-title">Dicas</h3>
+          <ul class="tips"><li>Refogar a cebola e o alho antes de bater é o que evita o gosto de cebola crua no creme.</li><li>A farinha (ou amido) é o que dá a cremosidade; se trocar por amido ou aveia, não precisa refogar junto com a manteiga.</li><li>Reserve 1/3 do milho para colocar inteiro no final e sentir os pedaços.</li><li>Creme de leite de caixinha entra no final, depois de ferver; o fresco pode ir ao fogo.</li><li>Noz-moscada ralada na hora rende muito mais sabor que a comprada em pó.</li><li>O azeite não está na lista da descrição: entra só para a manteiga não queimar.</li></ul>
+        </div>
+      </div>
+    </section>
+</main>
+
+<nav class="tabbar" role="tablist" aria-label="Navegação principal">
+  <button class="tab" data-tab="home" role="tab" aria-selected="true">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg>
+    <span>Receitas</span>
+  </button>
+  <button class="tab" data-tab="sobre" role="tab" aria-selected="false">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16.5"></line><line x1="12" y1="7.6" x2="12" y2="7.9"></line></svg>
+    <span>Sobre</span>
+  </button>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="sheet-wrap" id="sheet" hidden>
+  <div class="sheet-backdrop" data-close></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="Compartilhar">
+    <div class="sheet-handle"></div>
+    <h3>Compartilhar</h3>
+    <button class="sheet-item" data-action="image">
+      <span class="si"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="1.8"></circle><path d="M21 16l-5-5-6 6-3-3-4 4"></path></svg></span>
+      <span><b>Receita em imagem</b><small>Cartão em PNG, no formato selecionado (gramas ou medidas) — abre direto no WhatsApp</small></span>
+    </button>
+    <button class="sheet-item" data-action="app">
+      <span class="si"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"></rect><line x1="8" y1="9" x2="16" y2="9"></line><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="13" y2="17"></line></svg></span>
+      <span><b>App completo</b><small>Arquivo .html com as 100 receitas, para a pessoa abrir no navegador</small></span>
+    </button>
+    <button class="sheet-item" data-action="text">
+      <span class="si"><svg viewBox="0 0 24 24"><path d="M4 6h16"></path><path d="M4 12h10"></path><path d="M4 18h13"></path></svg></span>
+      <span><b>Somente texto</b><small>Nome da receita e uma linha de descrição</small></span>
+    </button>
+    <button class="sheet-cancel" data-close>Cancelar</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var $ = function (s, el) { return (el || document).querySelector(s); };
+  var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
+
+  var topbar = $("#topbar");
+  var titleEl = $("#title");
+  var subEl = $("#sub");
+  var backBtn = $("#back");
+  var themeBtn = $("#theme");
+  var list = $("#list");
+  var empty = $("#empty");
+  var qInput = $("#q");
+  var tabs = $$(".tab");
+  var toastEl = $("#toast");
+  var screens = $$(".screen");
+
+  var DEFAULT_TITLE = "Receitas";
+  var DEFAULT_SUB = subEl.textContent;
+  var MOON = '<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>';
+  var SUN = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"></circle><line x1="12" y1="2.5" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="21.5"></line><line x1="2.5" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="21.5" y2="12"></line><line x1="5.2" y1="5.2" x2="7" y2="7"></line><line x1="17" y1="17" x2="18.8" y2="18.8"></line><line x1="18.8" y1="5.2" x2="17" y2="7"></line><line x1="7" y1="17" x2="5.2" y2="18.8"></line></svg>';
+
+  var state = {
+    cat: "Todos",
+    favs: [],
+    scrollHome: 0,
+    recipeName: "",
+    recipeMeta: ""
+  };
+
+  try {
+    state.favs = JSON.parse(localStorage.getItem("mp:favs") || "[]") || [];
+  } catch (e) { state.favs = []; }
+
+  var favSet = {};
+  state.favs.forEach(function (id) { favSet[id] = 1; });
+
+  /* ---------- tema ---------- */
+  function applyTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
+    try { localStorage.setItem("mp:theme", t); } catch (e) {}
+    themeBtn.innerHTML = t === "dark" ? SUN : MOON;
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", t === "dark" ? "#12100f" : "#faf7f2");
+  }
+  var savedTheme;
+  try { savedTheme = localStorage.getItem("mp:theme"); } catch (e) {}
+  applyTheme(savedTheme || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+  themeBtn.addEventListener("click", function () {
+    applyTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+
+  /* ---------- favoritos ---------- */
+  function paintStars() {
+    $$(".star").forEach(function (btn) {
+      var on = !!favSet[btn.getAttribute("data-id")];
+      btn.textContent = on ? "★" : "☆";
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.classList.toggle("on", on);
+    });
+    $$("#list .item").forEach(function (card) {
+      var st = $(".star", card);
+      card.setAttribute("data-fav", favSet[st.getAttribute("data-id")] ? "1" : "0");
+    });
+  }
+
+  function toggleFav(id) {
+    if (favSet[id]) { delete favSet[id]; } else { favSet[id] = 1; }
+    try { localStorage.setItem("mp:favs", JSON.stringify(Object.keys(favSet))); } catch (e) {}
+    paintStars();
+    filter();
+    toast(favSet[id] ? "Adicionada às favoritas" : "Removida das favoritas");
+  }
+
+  /* ---------- busca e filtro ---------- */
+  function norm(s) {
+    return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
+  function filter() {
+    var term = norm(qInput.value.trim());
+    var shown = 0;
+    $$("#list .item").forEach(function (card) {
+      var okCat = state.cat === "Todos" ? true
+        : state.cat === "Favoritas" ? card.getAttribute("data-fav") === "1"
+        : card.getAttribute("data-cat") === state.cat;
+      var okQ = !term || card.getAttribute("data-search").indexOf(term) !== -1;
+      var show = okCat && okQ;
+      card.hidden = !show;
+      if (show) shown++;
+    });
+    empty.hidden = shown > 0;
+  }
+
+  $("#chips").addEventListener("click", function (e) {
+    var chip = e.target.closest(".chip");
+    if (!chip) return;
+    state.cat = chip.getAttribute("data-cat");
+    $$("#chips .chip").forEach(function (c) {
+      c.setAttribute("aria-pressed", c === chip ? "true" : "false");
+    });
+    filter();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  qInput.addEventListener("input", filter);
+
+  /* ---------- navegação ---------- */
+  function setTab(name) {
+    tabs.forEach(function (t) {
+      t.setAttribute("aria-selected", t.getAttribute("data-tab") === name ? "true" : "false");
+    });
+  }
+
+  function defaultSizeFor(section) {
+    var chips = $$(".sizes .chip", section);
+    if (!chips.length) return;
+    var table = $(".tbl", section);
+    var mode = window.innerWidth < 700 && chips.length > 1 ? chips[1].getAttribute("data-mode") : "all";
+    var chip = null;
+    chips.forEach(function (c) { if (c.getAttribute("data-mode") === mode) chip = c; });
+    if (!chip) chip = chips[0];
+    applySize(section, chip);
+  }
+
+  function applySize(section, chip) {
+    var mode = chip.getAttribute("data-mode");
+    $$(".tbl", section).forEach(function (table) {
+      table.className = table.className
+        .replace(/\bm-[0-9a-z]+\b/g, "")
+        .replace(/\s+/g, " ")
+        .trim() + " m-" + mode;
+    });
+    $$(".sizes .chip", section).forEach(function (c) {
+      c.setAttribute("aria-pressed", c === chip ? "true" : "false");
+    });
+  }
+
+  function applyUnit(section, unit) {
+    section.setAttribute("data-unit", unit);
+    $$(".seg button", section).forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-unit") === unit ? "true" : "false");
+    });
+    try { localStorage.setItem("mp:unit", unit); } catch (e) {}
+  }
+
+  function savedUnit() {
+    try { return localStorage.getItem("mp:unit") === "m" ? "m" : "g"; } catch (e) { return "g"; }
+  }
+
+  function openScreen(name, id) {
+    var el;
+    var title = DEFAULT_TITLE;
+    var sub = DEFAULT_SUB;
+    var tab = name;
+    var compact = false;
+
+    state.recipeName = "";
+    state.recipeMeta = "";
+
+    if (name === "recipe") {
+      el = document.getElementById("r-" + id);
+      if (!el) { name = "home"; el = $("#screen-home"); }
+      else {
+        state.recipeName = el.getAttribute("data-name");
+        state.recipeMeta = $(".meta", el).textContent;
+        tab = "home";
+        compact = true;
+        backBtn.hidden = false;
+        defaultSizeFor(el);
+        applyUnit(el, savedUnit());
+      }
+    }
+
+    if (name === "home") { el = $("#screen-home"); }
+    if (name === "sobre") { el = $("#screen-sobre"); title = "Sobre as receitas"; sub = "Medidas e observações"; }
+
+    if (name !== "recipe") backBtn.hidden = true;
+    topbar.classList.toggle("compact", compact);
+
+    screens.forEach(function (s) { s.hidden = s !== el; });
+    titleEl.textContent = title;
+    subEl.textContent = sub;
+    setTab(tab);
+    window.scrollTo(0, 0);
+    syncTopbar();
+  }
+
+  function syncTopbar() {
+    if (!state.recipeName) return;
+    var scrolled = window.scrollY > 84;
+    titleEl.textContent = scrolled ? state.recipeName : DEFAULT_TITLE;
+  }
+
+  function route() {
+    var h = (location.hash || "").replace(/^#\/?/, "");
+    if (h.indexOf("r/") === 0) {
+      openScreen("recipe", h.slice(2));
+    } else if (h === "sobre") {
+      openScreen("sobre");
+    } else {
+      openScreen("home");
+      if (state.scrollHome) {
+        var y = state.scrollHome;
+        state.scrollHome = 0;
+        requestAnimationFrame(function () { window.scrollTo(0, y); });
+      }
+    }
+  }
+
+  window.addEventListener("hashchange", route);
+
+  /* ---------- cliques ---------- */
+  list.addEventListener("click", function (e) {
+    var star = e.target.closest(".star");
+    if (star) { e.preventDefault(); e.stopPropagation(); toggleFav(star.getAttribute("data-id")); return; }
+    var item = e.target.closest(".item");
+    if (item) {
+      state.scrollHome = window.scrollY;
+      location.hash = "r/" + item.getAttribute("data-id");
+    }
+  });
+
+  list.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var item = e.target.closest(".item");
+    if (!item || e.target.closest(".star")) return;
+    e.preventDefault();
+    state.scrollHome = window.scrollY;
+    location.hash = "r/" + item.getAttribute("data-id");
+  });
+
+  document.addEventListener("click", function (e) {
+    var star = e.target.closest(".recipe .star");
+    if (star) { toggleFav(star.getAttribute("data-id")); return; }
+
+    var share = e.target.closest(".share");
+    if (share) { openShareSheet(share.getAttribute("data-id")); return; }
+
+    var seg = e.target.closest(".seg button");
+    if (seg) { applyUnit(seg.closest(".recipe"), seg.getAttribute("data-unit")); return; }
+
+    var chip = e.target.closest(".sizes .chip");
+    if (chip) {
+      applySize(chip.closest(".recipe"), chip);
+      return;
+    }
+  });
+
+  backBtn.addEventListener("click", function () {
+    if (history.length > 1) history.back();
+    else location.hash = "";
+  });
+
+  tabs.forEach(function (t) {
+    t.addEventListener("click", function () {
+      var name = t.getAttribute("data-tab");
+      if (name === "home") {
+        if (location.hash.replace(/^#\/?/, "") === "") route();
+        else location.hash = "";
+      } else {
+        location.hash = name;
+      }
+    });
+  });
+
+  /* ---------- compartilhar ---------- */
+  var sheet = $("#sheet");
+  var sheetRecipe = null;
+
+  function openShareSheet(id) {
+    sheetRecipe = id;
+    sheet.hidden = false;
+    document.body.classList.add("sheet-open");
+  }
+  function closeShareSheet() {
+    sheet.hidden = true;
+    document.body.classList.remove("sheet-open");
+  }
+  sheet.addEventListener("click", function (e) {
+    if (e.target.closest("[data-close]")) { closeShareSheet(); return; }
+    var btn = e.target.closest("[data-action]");
+    if (!btn) return;
+    var action = btn.getAttribute("data-action");
+    var id = sheetRecipe;
+    closeShareSheet();
+    if (action === "app") shareApp();
+    else if (action === "image") shareImage(id);
+    else shareText(id);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !sheet.hidden) closeShareSheet();
+  });
+
+  function slug(s) {
+    return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-+|-+$/g, "").toLowerCase().slice(0, 60);
+  }
+
+  function downloadFile(file) {
+    try {
+      var url = URL.createObjectURL(file);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // compartilha arquivos de verdade (WhatsApp, Telegram, e-mail…); se o navegador
+  // não suportar arquivos, baixa o arquivo para a pessoa anexar manualmente
+  function shareFiles(files, title, text, savedMsg) {
+    if (navigator.share && navigator.canShare) {
+      try {
+        if (navigator.canShare({ files: files })) {
+          navigator.share({ files: files, title: title, text: text }).catch(function () {});
+          return;
+        }
+      } catch (e) { /* segue para o download */ }
+    }
+    var ok = files.every(downloadFile);
+    toast(ok ? (savedMsg || "Arquivo salvo") : "Não foi possível gerar o arquivo");
+  }
+
+  function shareApp() {
+    try {
+      var html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      var file = new File([html], "receitas.html", { type: "text/html" });
+      shareFiles([file], "Receitas",
+        "Receitas com os ingredientes em gramas ou nas medidas de copo e colher.",
+        "App salvo em .html — anexe no WhatsApp");
+    } catch (e) {
+      toast("Não foi possível gerar o arquivo");
+    }
+  }
+
+  function shareText(id) {
+    var sec = document.getElementById("r-" + id);
+    if (!sec) return;
+    var name = sec.getAttribute("data-name");
+    var how = sec.getAttribute("data-unit") === "m" ? "as medidas do manual (copos e colheres)" : "as quantidades em gramas";
+    var text = name + " — receita do app Receitas, com " + how + ".";
+    if (navigator.share) {
+      navigator.share({ title: name, text: text }).catch(function () {});
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast("Texto copiado"); })
+        .catch(function () { toast(text); });
+    } else {
+      toast(text);
+    }
+  }
+
+  function shareImage(id) {
+    var sec = document.getElementById("r-" + id);
+    if (!sec) return;
+    try {
+      var unit = sec.getAttribute("data-unit") === "m" ? "medidas" : "gramas";
+      var tbl = sec.querySelector(unit === "medidas" ? ".unit-m .tbl" : ".unit-g .tbl");
+      var mm = tbl.className.match(/\bm-([0-9a-z]+)\b/);
+      var mode = mm ? mm[1] : "all";
+      var fname = "receita-" + slug(sec.getAttribute("data-name")) + "-" + unit +
+        (mode !== "all" ? "-" + mode + "g" : "") + ".png";
+      var canvas = buildRecipeCanvas(sec);
+      canvas.toBlob(function (blob) {
+        if (!blob) { toast("Não foi possível gerar a imagem"); return; }
+        var file = new File([blob], fname, { type: "image/png" });
+        shareFiles([file], sec.getAttribute("data-name"),
+          "Receita do app Receitas.", "Imagem salva — anexe no WhatsApp");
+      }, "image/png");
+    } catch (e) {
+      toast("Não foi possível gerar a imagem");
+    }
+  }
+
+  function buildRecipeCanvas(sec) {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    var C = dark ? {
+      bg: "#12100f", text: "#f4ede4", muted: "#a99b8d", line: "#2c2521",
+      accent: "#9dbce6", section: "#241f1b"
+    } : {
+      bg: "#faf7f2", text: "#211a15", muted: "#7a6c60", line: "#eae0d4",
+      accent: "#1f3a5f", section: "#f3ece3"
+    };
+
+    var unit = sec.getAttribute("data-unit") === "m" ? "m" : "g";
+    var table = sec.querySelector(unit === "m" ? ".unit-m .tbl" : ".unit-g .tbl");
+    var modeAttr = table.className.match(/\bm-([0-9a-z]+)\b/);
+    var mode = modeAttr ? modeAttr[1] : "all";
+    var visible = function (el) {
+      var s = el.getAttribute("data-size");
+      return s === "ing" || mode === "all" || s === mode;
+    };
+
+    var heads = [];
+    Array.prototype.forEach.call(table.querySelectorAll("thead th"), function (th) {
+      if (visible(th)) heads.push(th.textContent.trim());
+    });
+
+    var rows = [];
+    Array.prototype.forEach.call(table.querySelectorAll("tbody tr"), function (tr) {
+      if (tr.className.indexOf("sec") >= 0) {
+        rows.push({ type: "sec", text: tr.textContent.trim() });
+        return;
+      }
+      var cells = [];
+      Array.prototype.forEach.call(tr.querySelectorAll("td"), function (td) {
+        if (visible(td)) cells.push(td.textContent.trim());
+      });
+      rows.push({ type: tr.className.indexOf("total") >= 0 ? "total" : "row", cells: cells });
+    });
+
+    var W = 1080, PAD = 56, LINE = 34;
+    var c = document.createElement("canvas");
+    var ctx = c.getContext("2d");
+    var F = 'system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+    ctx.textBaseline = "top";
+
+    function wrap(text, maxW, font) {
+      ctx.font = font;
+      var words = String(text).split(" ");
+      var lines = [], cur = "";
+      for (var i = 0; i < words.length; i++) {
+        var trial = cur ? cur + " " + words[i] : words[i];
+        if (!cur || ctx.measureText(trial).width <= maxW) cur = trial;
+        else { lines.push(cur); cur = words[i]; }
+      }
+      if (cur) lines.push(cur);
+      return lines.length ? lines : [""];
+    }
+
+    var nameFont = "400 27px " + F;
+    var nameBold = "600 27px " + F;
+    var valFont = "400 25px " + F;
+
+    var vals = heads.slice(1);
+    var nVal = vals.length;
+    var colW = [];
+    for (var v = 0; v < nVal; v++) {
+      var wMax = ctx.measureText(vals[v]).width;
+      ctx.font = valFont;
+      for (var r = 0; r < rows.length; r++) {
+        if (!rows[r].cells || rows[r].cells.length < 2) continue;
+        wMax = Math.max(wMax, ctx.measureText(rows[r].cells[v + 1] || "").width);
+      }
+      colW.push(Math.min(Math.max(wMax + 40, 132), 300));
+    }
+    var sumV = colW.reduce(function (a, b) { return a + b; }, 0);
+    var nameW = W - 2 * PAD - sumV;
+    if (nameW < 250 && sumV > 0) {
+      var scale = (W - 2 * PAD - 250) / sumV;
+      colW = colW.map(function (x) { return Math.max(108, Math.floor(x * scale)); });
+      sumV = colW.reduce(function (a, b) { return a + b; }, 0);
+      nameW = W - 2 * PAD - sumV;
+    }
+
+    var layout = [];
+    var bodyH = 0;
+    for (var r2 = 0; r2 < rows.length; r2++) {
+      var rw = rows[r2];
+      if (rw.type === "sec") { layout.push({ h: 48 }); bodyH += 48; continue; }
+      var nL = wrap(rw.cells[0], nameW - 14, rw.type === "total" ? nameBold : nameFont);
+      var vL = 1;
+      for (var v2 = 0; v2 < nVal; v2++) {
+        vL = Math.max(vL, wrap(rw.cells[v2 + 1] || "", colW[v2] - 14, valFont).length);
+      }
+      var h = Math.max(nL.length, vL) * LINE + 24;
+      layout.push({ h: h, n: nL });
+      bodyH += h;
+    }
+
+    var titleLines = wrap(sec.getAttribute("data-name"), W - 2 * PAD, "700 44px " + F).slice(0, 2);
+    var titleH = titleLines.length * 54 + 40 + 30 + 18;
+    var headerH = 56;
+    var footerH = unit === "m" ? 92 : 78;
+
+    // modo de preparo e dicas (lidos do DOM)
+    var steps = Array.prototype.map.call(sec.querySelectorAll(".steps li"), function (li) {
+      return li.textContent.trim();
+    });
+    var tips = Array.prototype.map.call(sec.querySelectorAll(".tips li"), function (li) {
+      return li.textContent.trim();
+    });
+    var stepFont = "400 25px " + F;
+    var auxFont = "400 24px " + F;
+    var stepLines = steps.map(function (s) { return wrap(s, W - 2 * PAD - 46, stepFont); });
+    var tipLines = tips.map(function (s) { return wrap(s, W - 2 * PAD - 22, auxFont); });
+    var stepsH = steps.length ? 44 + stepLines.reduce(function (a, l) { return a + l.length * 32 + 16; }, 0) : 0;
+    var tipsH = tips.length ? 44 + tipLines.reduce(function (a, l) { return a + l.length * 31 + 14; }, 0) : 0;
+
+    var H = PAD + titleH + headerH + bodyH + 18 + footerH + PAD + stepsH + tipsH + (steps.length || tips.length ? 20 : 0);
+
+    c.width = W;
+    c.height = H;
+    ctx.textBaseline = "top";
+
+    ctx.fillStyle = C.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    var y = PAD;
+    ctx.fillStyle = C.text;
+    ctx.font = "700 44px " + F;
+    titleLines.forEach(function (ln) { ctx.fillText(ln, PAD, y); y += 54; });
+
+    y += 4;
+    ctx.font = "400 25px " + F;
+    ctx.fillStyle = C.muted;
+    ctx.fillText($(".meta", sec).textContent, PAD, y);
+    y += 36;
+
+    ctx.font = "600 21px " + F;
+    ctx.fillStyle = C.accent;
+    ctx.fillText(unit === "m" ? "MEDIDAS DO MANUAL" : "QUANTIDADES EM GRAMAS", PAD, y);
+    y = PAD + titleH;
+
+    ctx.font = "700 20px " + F;
+    ctx.fillStyle = C.muted;
+    ctx.fillText(heads[0].toUpperCase(), PAD, y + 18);
+    var x = PAD + nameW;
+    ctx.textAlign = "right";
+    for (var hv = 0; hv < nVal; hv++) {
+      ctx.fillText(vals[hv].toUpperCase(), x + colW[hv] - 14, y + 18);
+      x += colW[hv];
+    }
+    ctx.textAlign = "left";
+    y += headerH;
+    ctx.strokeStyle = C.line;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+
+    for (var r3 = 0; r3 < rows.length; r3++) {
+      var row = rows[r3], L = layout[r3];
+      if (row.type === "sec") {
+        ctx.fillStyle = C.section;
+        ctx.fillRect(PAD - 12, y + 8, W - 2 * PAD + 24, 34);
+        ctx.fillStyle = C.accent;
+        ctx.font = "700 18px " + F;
+        ctx.fillText(row.text.toUpperCase(), PAD, y + 16);
+        y += L.h;
+        continue;
+      }
+      if (row.type === "total") {
+        ctx.strokeStyle = C.line;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+      }
+      ctx.fillStyle = C.text;
+      ctx.font = row.type === "total" ? nameBold : nameFont;
+      var ly = y + 15;
+      L.n.forEach(function (ln) { ctx.fillText(ln, PAD, ly); ly += LINE; });
+
+      ctx.font = valFont;
+      var vx = PAD + nameW;
+      for (var v3 = 0; v3 < nVal; v3++) {
+        var txt = row.cells[v3 + 1] || "";
+        ctx.fillStyle = txt === "a gosto" ? C.muted : C.text;
+        ctx.textAlign = "right";
+        var parts = wrap(txt, colW[v3] - 14, valFont);
+        var vy = y + 16;
+        parts.forEach(function (t) { ctx.fillText(t, vx + colW[v3] - 14, vy); vy += LINE; });
+        vx += colW[v3];
+      }
+      ctx.textAlign = "left";
+      y += L.h;
+      ctx.strokeStyle = C.line;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+    }
+
+    y += 26;
+
+    // modo de preparo
+    if (steps.length) {
+      ctx.fillStyle = C.accent;
+      ctx.font = "700 22px " + F;
+      ctx.fillText("MODO DE PREPARO", PAD, y);
+      y += 44;
+      for (var s1 = 0; s1 < steps.length; s1++) {
+        ctx.fillStyle = C.section;
+        ctx.beginPath();
+        ctx.arc(PAD + 13, y + 13, 13, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = C.accent;
+        ctx.font = "700 13px " + F;
+        ctx.textAlign = "center";
+        ctx.fillText(String(s1 + 1), PAD + 13, y + 6);
+        ctx.textAlign = "left";
+        ctx.fillStyle = C.text;
+        ctx.font = stepFont;
+        var sy = y;
+        for (var sl = 0; sl < stepLines[s1].length; sl++) {
+          ctx.fillText(stepLines[s1][sl], PAD + 46, sy);
+          sy += 32;
+        }
+        y += stepLines[s1].length * 32 + 16;
+      }
+      y += 4;
+    }
+
+    // dicas
+    if (tips.length) {
+      ctx.fillStyle = C.accent2;
+      ctx.font = "700 22px " + F;
+      ctx.fillText("DICAS", PAD, y);
+      y += 44;
+      ctx.font = auxFont;
+      for (var t1 = 0; t1 < tips.length; t1++) {
+        ctx.fillStyle = C.accent2;
+        ctx.beginPath();
+        ctx.arc(PAD + 5, y + 12, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = C.muted;
+        var ty = y;
+        for (var tl = 0; tl < tipLines[t1].length; tl++) {
+          ctx.fillText(tipLines[t1][tl], PAD + 22, ty);
+          ty += 31;
+        }
+        y += tipLines[t1].length * 31 + 14;
+      }
+      y += 4;
+    }
+
+    ctx.fillStyle = C.muted;
+    ctx.font = "400 21px " + F;
+    if (unit === "m") {
+      ctx.fillText("Copo medidor 240 ml · colher de sopa 15 ml · colher de chá 5 ml", PAD, y);
+      y += 30;
+    }
+    ctx.fillText("Receitas", PAD, y);
+
+    return c;
+  }
+
+  /* ---------- toast ---------- */
+  var toastTimer;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 1700);
+  }
+
+  /* ---------- topbar shadow ---------- */
+  var scrollTick = false;
+  window.addEventListener("scroll", function () {
+    if (scrollTick) return;
+    scrollTick = true;
+    requestAnimationFrame(function () {
+      topbar.classList.toggle("scrolled", window.scrollY > 4);
+      syncTopbar();
+      scrollTick = false;
+    });
+  }, { passive: true });
+
+  /* ---------- init ---------- */
+  paintStars();
+  filter();
+  route();
+})();
+</script>
+</body>
+</html>
