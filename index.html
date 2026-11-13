@@ -280,7 +280,7 @@ body.sheet-open{overflow:hidden}
   </button>
   <div class="titles">
     <h1 id="title">Receitas</h1>
-    <p id="sub">5 receitas</p>
+    <p id="sub">6 receitas</p>
   </div>
   <button class="icon-btn" id="theme" aria-label="Alternar tema claro e escuro">
     <svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
@@ -294,7 +294,7 @@ body.sheet-open{overflow:hidden}
         <div>
           <strong>Receitas</strong>
           <span>Receitas reunidas em vídeos e testadas na cozinha, com os ingredientes em gramas ou nas medidas de copo e colher.</span>
-          <span class="pill">5 receitas</span>
+          <span class="pill">6 receitas</span>
         </div>
       </div>
 
@@ -303,7 +303,7 @@ body.sheet-open{overflow:hidden}
         <input id="q" type="search" placeholder="Buscar receita ou ingrediente" autocomplete="off" enterkeyhint="search">
       </label>
 
-      <div class="chips" id="chips" role="group" aria-label="Categorias"><button class="chip" data-cat="Todos" aria-pressed="true">Todas</button><button class="chip" data-cat="Favoritas" aria-pressed="false">★ Favoritas</button><button class="chip" data-cat="Aves" aria-pressed="false">Aves <span class="cnt">1</span></button><button class="chip" data-cat="Acompanhamentos" aria-pressed="false">Acompanhamentos <span class="cnt">2</span></button><button class="chip" data-cat="Doces" aria-pressed="false">Doces <span class="cnt">1</span></button><button class="chip" data-cat="Carnes" aria-pressed="false">Carnes <span class="cnt">1</span></button></div>
+      <div class="chips" id="chips" role="group" aria-label="Categorias"><button class="chip" data-cat="Todos" aria-pressed="true">Todas</button><button class="chip" data-cat="Favoritas" aria-pressed="false">★ Favoritas</button><button class="chip" data-cat="Aves" aria-pressed="false">Aves <span class="cnt">1</span></button><button class="chip" data-cat="Acompanhamentos" aria-pressed="false">Acompanhamentos <span class="cnt">2</span></button><button class="chip" data-cat="Doces" aria-pressed="false">Doces <span class="cnt">1</span></button><button class="chip" data-cat="Carnes" aria-pressed="false">Carnes <span class="cnt">1</span></button><button class="chip" data-cat="Massas" aria-pressed="false">Massas <span class="cnt">1</span></button></div>
 
       <div class="list" id="list">
       <div class="item" role="button" tabindex="0" data-id="0" data-cat="Aves" data-search="frango agridoce e picante aves como faz — leo abreu frango (meio da asa, asa ou coxa) shoyu ketchup mel oleo de gergelim paprica defumada pimenta caiena alho em po gengibre em po coentro em po sal pimenta-do-reino raspas de limao suco de limao gergelim cebolinha" data-fav="0">
@@ -340,6 +340,13 @@ body.sheet-open{overflow:hidden}
           <span class="m">Acompanhamentos · Ana Zambrin</span>
         </span>
         <button class="star" data-id="4" aria-label="Favoritar Creme de milho cremoso" aria-pressed="false">☆</button>
+      </div>
+      <div class="item" role="button" tabindex="0" data-id="5" data-cat="Massas" data-search="pizza frita da vo massas ana zambrin fermento fresco farinha de trigo acucar sal manteiga ou margarina ovo agua mussarela presunto tomate cebola oregano sal e pimenta-do-reino oleo para fritar" data-fav="0">
+        <span class="txt">
+          <span class="n">Pizza frita da vó</span>
+          <span class="m">Massas · Ana Zambrin</span>
+        </span>
+        <button class="star" data-id="5" aria-label="Favoritar Pizza frita da vó" aria-pressed="false">☆</button>
       </div></div>
       <p class="empty" id="empty" hidden>Nenhuma receita encontrada.</p>
     </div>
@@ -568,6 +575,47 @@ body.sheet-open{overflow:hidden}
         <div class="tips-card">
           <h3 class="block-title">Dicas</h3>
           <ul class="tips"><li>Refogar a cebola e o alho antes de bater é o que evita o gosto de cebola crua no creme.</li><li>A farinha (ou amido) é o que dá a cremosidade; se trocar por amido ou aveia, não precisa refogar junto com a manteiga.</li><li>Reserve 1/3 do milho para colocar inteiro no final e sentir os pedaços.</li><li>Creme de leite de caixinha entra no final, depois de ferver; o fresco pode ir ao fogo.</li><li>Noz-moscada ralada na hora rende muito mais sabor que a comprada em pó.</li><li>O azeite não está na lista da descrição: entra só para a manteiga não queimar.</li></ul>
+        </div>
+      </div>
+    </section>
+    <section class="screen recipe" id="r-5" data-name="Pizza frita da vó" data-unit="g" hidden>
+      <div class="wrap">
+        <div class="r-head">
+          <div class="grow">
+            <h2>Pizza frita da vó</h2>
+            <div class="meta">Massas · <a class="src" href="https://www.youtube.com/watch?v=fYM5cHXNLk0" target="_blank" rel="noopener">Vídeo: Ana Zambrin</a></div>
+          </div>
+          <button class="icon-btn star" data-id="5" aria-label="Favoritar Pizza frita da vó" aria-pressed="false">☆</button>
+          <button class="icon-btn share" data-id="5" aria-label="Compartilhar Pizza frita da vó"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
+        </div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Formato das quantidades">
+            <button data-unit="g" aria-pressed="true">Gramas</button>
+            <button data-unit="m" aria-pressed="false">Medidas</button>
+          </div>
+        </div>
+        <div class="tbl-wrap unit-g">
+          <table class="tbl" data-mode="all" data-id="5">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade (g)</th></tr></thead>
+            <tbody><tr class="sec"><td colspan="2">MASSA</td></tr><tr><td data-size="ing">Fermento fresco</td><td class="num" data-size="0">35</td></tr><tr><td data-size="ing">Farinha de trigo</td><td class="num" data-size="0">500</td></tr><tr><td data-size="ing">Açúcar</td><td class="num" data-size="0">12</td></tr><tr><td data-size="ing">Sal</td><td class="num" data-size="0">8</td></tr><tr><td data-size="ing">Manteiga ou margarina</td><td class="num" data-size="0">14</td></tr><tr><td data-size="ing">Ovo</td><td class="num" data-size="0">50</td></tr><tr><td data-size="ing">Água</td><td class="num" data-size="0">250</td></tr><tr class="sec"><td colspan="2">RECHEIO</td></tr><tr><td data-size="ing">Mussarela</td><td class="num" data-size="0">250</td></tr><tr><td data-size="ing">Presunto</td><td class="num" data-size="0">250</td></tr><tr><td data-size="ing">Tomate</td><td class="num" data-size="0">200</td></tr><tr><td data-size="ing">Cebola</td><td class="num" data-size="0">100</td></tr><tr><td data-size="ing">Orégano</td><td class="num dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Sal e pimenta-do-reino</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="sec"><td colspan="2">FRITURA</td></tr><tr><td data-size="ing">Óleo para fritar</td><td class="num dim" data-size="0">a gosto</td></tr><tr class="total"><td data-size="ing">Soma dos ingredientes</td><td class="num" data-size="0">1669</td></tr></tbody>
+          </table>
+        </div>
+        <div class="tbl-wrap unit-m">
+          <table class="tbl measure" data-mode="all" data-id="5">
+            <thead><tr><th data-size="ing" scope="col">Ingrediente</th><th class="num" data-size="0" scope="col">Quantidade</th></tr></thead>
+            <tbody><tr class="sec"><td colspan="2">MASSA</td></tr><tr><td data-size="ing">Fermento fresco</td><td class="q" data-size="0">35 g (ou 7 g de seco)</td></tr><tr><td data-size="ing">Farinha de trigo</td><td class="q" data-size="0">500 g</td></tr><tr><td data-size="ing">Açúcar</td><td class="q" data-size="0">1 colher (sopa) cheia</td></tr><tr><td data-size="ing">Sal</td><td class="q" data-size="0">1 colher (sopa) rasa</td></tr><tr><td data-size="ing">Manteiga ou margarina</td><td class="q" data-size="0">1 colher (sopa)</td></tr><tr><td data-size="ing">Ovo</td><td class="q" data-size="0">1</td></tr><tr><td data-size="ing">Água</td><td class="q" data-size="0">250 ml</td></tr><tr class="sec"><td colspan="2">RECHEIO</td></tr><tr><td data-size="ing">Mussarela</td><td class="q" data-size="0">250 g</td></tr><tr><td data-size="ing">Presunto</td><td class="q" data-size="0">250 g</td></tr><tr><td data-size="ing">Tomate</td><td class="q" data-size="0">200 g</td></tr><tr><td data-size="ing">Cebola</td><td class="q" data-size="0">1</td></tr><tr><td data-size="ing">Orégano</td><td class="q dim" data-size="0">a gosto</td></tr><tr><td data-size="ing">Sal e pimenta-do-reino</td><td class="q dim" data-size="0">a gosto</td></tr><tr class="sec"><td colspan="2">FRITURA</td></tr><tr><td data-size="ing">Óleo para fritar</td><td class="q" data-size="0">o quanto baste</td></tr></tbody>
+          </table>
+        </div>
+        <p class="note note-g">Quantidades em gramas. “a gosto” = sem quantidade fixa na receita original.</p>
+        <p class="note note-m">Medidas como na receita original (copos, colheres, gramas e mililitros). “a gosto” = sem quantidade fixa.</p>
+        
+        <div class="steps-card">
+          <h3 class="block-title">Modo de preparo</h3>
+          <ol class="steps"><li>Dissolver o fermento fresco com o açúcar e reservar. Se usar fermento seco, misture direto na farinha.</li><li>Juntar numa tigela a farinha, o sal, a manteiga derretida, o ovo batido, a água e o fermento dissolvido.</li><li>Misturar com uma colher até ficar difícil; passar para a bancada e amassar por 10 minutos, até a massa ficar lisa — se grudar, acrescente farinha aos poucos.</li><li>Untar uma tigela com óleo, colocar a massa e deixar crescer por 30 a 40 minutos, até dobrar de tamanho.</li><li>Recheio: misturar o presunto picado, a mussarela ralada, o tomate picado, a cebola, o orégano, o sal e a pimenta.</li><li>Abrir a massa na bancada enfarinhada em um retângulo comprido e cortar em pedaços.</li><li>Abrir cada pedaço com o rolo, sem deixar fina demais: é pizza, não pastel.</li><li>Distribuir o recheio, deixando as bordas livres.</li><li>Fechar virando a massa sobre o recheio e apertar bem as bordas com um garfo; cortar o excesso de massa.</li><li>Aquecer o óleo em fogo médio (não pode estar pelando) e fritar por cerca de 5 minutos de cada lado, até dourar.</li><li>Escorrer em grade ou papel-toalha e servir.</li></ol>
+        </div>
+        <div class="tips-card">
+          <h3 class="block-title">Dicas</h3>
+          <ul class="tips"><li>Rende cerca de 15 pizzas do tamanho do vídeo — a descrição traz uma errata com esse número.</li><li>Fogo médio e óleo não muito quente: se fritar rápido, a massa não cozinha por dentro.</li><li>Feche muito bem as bordas com o garfo; se abrir na fritura, faz sujeira e perde o recheio.</li><li>A massa é versátil: serve também para pizza assada e, se sobrar, vira pãozinho.</li><li>Variações: calabresa com cebola e requeijão, frango com requeijão, ou doce com queijo e goiabada.</li><li>O fermento fresco pode ser trocado por 7 g de fermento seco.</li></ul>
         </div>
       </div>
     </section>
